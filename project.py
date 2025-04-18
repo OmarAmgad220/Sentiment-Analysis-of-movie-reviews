@@ -4,6 +4,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, accuracy_score
+
+import nltk
+nltk.download('stopwords')
+
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import string
