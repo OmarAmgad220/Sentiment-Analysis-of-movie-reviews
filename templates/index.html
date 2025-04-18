@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/CSS/styles.css">
+    <link rel="stylesheet" href="/static/CSS/normalize.css">
+</head>
+<body>
+    <!--Nav Bar Start-->
+    <ul>
+        <li><a class="Logo" href="{{ url_for('home') }}">Movie Reviews</a></li>
+        <li><h2>NLP</h2></li>
+    </ul>
+    <!--Nav Bar End-->
+
+    <!--Write Review Start-->
+    <div>
+        <form action="{{ url_for('predict')}}" method="post">
+            <p>Write a review:</p>
+            <textarea name="content" placeholder="Review" required="required"></textarea>
+            <button type="submit">Predict</button>
+        </form>
+        <div class="predict">{{ predict }}</div>    
+    </div>
+    <!--Write Review End-->
+
+    <!-- Tabs Navigation Start -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <button class="tab-button" data-tab="positive">Positive Reviews</button>
+            <button class="tab-button" data-tab="negative">Negative Reviews</button>
+        </div>
+
+        <div id="positive" class="tab-content">
+            {% if positive %}
+                <ul>
+                    {% for review in positive %}
+                        <li class="review positive-review">{{ review }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div id="negative" class="tab-content">
+            {% if negative %}
+                <ul>
+                    {% for review in negative %}
+                        <li class="review negative-review">{{ review }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>  
+    </div>
+    <!-- Tabs Navigation End -->
+
+    <script src="/static/script/script.js"></script>
+</body>
+</html>
