@@ -2,11 +2,11 @@
 import numpy as np
 from flask import Flask, request, render_template
 import pickle
-
+from project import preprocess_text
 app = Flask(__name__)
 
 # load the feature extractor and models
-LogisticRegression = pickle.load(open('models/Logistic_Regression.pkl', 'rb'))
+Model = pickle.load(open('models/Logistic_Regression.pkl', 'rb'))
 
 # load the saved vectorizer
 vectorizer = pickle.load(open('models/vectorizer.pkl', 'rb'))
@@ -30,8 +30,9 @@ def home():
 def predict():
     if request.method == 'POST':
         input_text = request.form['content']
+        input_text = preprocess_text(input_text)
         features = vectorizer.transform([input_text])
-        prediction = LogisticRegression.predict(features)[0]
+        prediction = Model.predict(features)[0]
 
         if prediction == 1:
             positive.append(input_text)
