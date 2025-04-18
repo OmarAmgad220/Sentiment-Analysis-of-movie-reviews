@@ -22,7 +22,13 @@
             <textarea name="content" placeholder="Review" required="required"></textarea>
             <button type="submit">Predict</button>
         </form>
-        <div class="predict">{{ predict }}</div>    
+        {% if predict == "Positive" %}
+            <div class="predict positive-review">{{ predict }}</div>
+        {% elif predict == "Negative" %}
+            <div class="predict negative-review">{{ predict }}</div>
+        {% else %}
+        <div class="predict">{{ predict }}</div>
+        {% endif %}
     </div>
     <!--Write Review End-->
 

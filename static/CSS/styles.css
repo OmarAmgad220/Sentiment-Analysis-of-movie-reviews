@@ -117,6 +117,16 @@ p {
     text-align: center;
 }
 
+div.positive-review {
+    color: var(--positive-review);
+    border-left: 4px solid var(--positive-review);
+}
+
+div.negative-review {
+    color: var(--negative-review);
+    border-left: 4px solid var(--negative-review);
+}
+
 /* Main Form End */
 
 .tabs-container {
