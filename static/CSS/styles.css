@@ -1,0 +1,202 @@
+:root {
+	--background: #a2a8d3; 
+    --white: #e7eaf6;
+    --primary-color: #113f67;
+    --accent-color: #38598b; 
+    --shadow: rgba(0, 0, 0, 0.1);
+    --negative-review: #721c24;
+    --positive-review: #155724;
+}
+
+* {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+html {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Nav Bar Start */
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    column-gap: 100px;
+    padding: 12px;
+    background: var(--primary-color, #113f67); 
+    justify-content: space-between;
+    align-items: center;
+}
+
+a, h2 {
+    color: var(--white, white);
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.Logo {
+    font-size: 30px;
+}
+
+
+/* Nav Bar End */
+
+/* Main Form Start */
+form {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid var(--white);
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+}
+
+textarea:focus {
+    border-color: var(--accent-color);
+}
+
+button[type="submit"] {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px;
+    font-size: 1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--primary-color);
+}
+
+p {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.predict {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background-color: var(--white);
+    border-left: 6px solid var(--primary-color);
+    font-size: 1.1em;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    color: var(--primary-color);
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Main Form End */
+
+.tabs-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    background-color: var(--accent-color);
+    color: var(--white);
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.tab-button.active {
+    background-color: var(--primary-color);
+}
+
+.tab-button:hover {
+    background-color: var(--primary-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content ul {
+    border-radius: 4px;
+    padding: 20px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.tab-content li {
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 4px;
+    width: 90%;
+}
+
+/* Review styling */
+.review {
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* Positive review */
+.positive-review {
+    background-color: #d4edda;
+    color: var(--positive-review);
+    border-left: 4px solid var(--positive-review);
+}
+
+/* Negative review */
+.negative-review {
+    background-color: #f8d7da;
+    color: var(--negative-review);
+    border-left: 4px solid var(--negative-review);
+
+}
