@@ -121,9 +121,9 @@ def main():
     
     #region for trainning and testing
     
-    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
     
-    #Logistic Regression classifier
+    # # Logistic Regression classifier
     # classifier = LogisticRegression(max_iter=1000)
     # classifier.fit(X_train, y_train)
     
@@ -134,11 +134,11 @@ def main():
     # print("\nClassification Report:")
     # print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
     
-    # Save To new CSV file
+    # # Save To new CSV file
     # reviews_df.to_csv('processed_movie_reviews.csv', index=False)
     # print("\nProcessed DataFrame saved to 'processed_movie_reviews.csv'")
     
-    #SVM classifier
+    # # SVM classifier
     # model = SVC(kernel='linear',C=1.6)
     # model.fit(X_train, y_train)
     
@@ -148,7 +148,7 @@ def main():
     # print(f"Accuracy: {100 * accuracy_score(y_test, y_pred):.2f}")
     # print("\nClassification Report:")
     # print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
-    # Save To new CSV file
+    # # Save To new CSV file
     # reviews_df.to_csv('processed_movie_reviews.csv', index=False)
     # print("\nProcessed DataFrame saved to 'processed_movie_reviews.csv'")
     
@@ -161,7 +161,7 @@ def main():
     CompleteSVM = SVC(kernel='linear',C=1.6)
     CompleteSVM.fit(X, y)
     
-    input_text = "I love this movie! It's fantastic and the acting is superb."
+    input_text = "movie good"
     input_text = preprocess_text(input_text)
     features = tfidf_vectorizer.transform([input_text])
     prediction = CompleteLogistic.predict(features)[0]
@@ -169,9 +169,9 @@ def main():
     prediction = CompleteSVM.predict(features)[0]
     print(f"Prediction of SVM for '{input_text}': {'Positive' if prediction == 1 else 'Negative'}")
     
-    pickle.dump(CompleteLogistic, open('models/Logistic_Regression.pkl', 'wb'))
-    pickle.dump(CompleteSVM, open('models/SVM.pkl', 'wb')) 
-    
+    # pickle.dump(CompleteLogistic, open('models/Logistic_Regression.pkl', 'wb'))
+    # pickle.dump(CompleteSVM, open('models/SVM.pkl', 'wb')) 
+    # pickle.dump(tfidf_vectorizer, open('models/tfidf_vectorizer.pkl', 'wb'))
     #endregion
 if __name__ == "__main__":
     main()

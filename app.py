@@ -6,10 +6,10 @@ from project import preprocess_text
 app = Flask(__name__)
 
 # load the feature extractor and models
-Model = pickle.load(open('models/Logistic_Regression.pkl', 'rb'))
+Model = pickle.load(open('models/SVM.pkl', 'rb'))
 
 # load the saved vectorizer
-vectorizer = pickle.load(open('models/vectorizer.pkl', 'rb'))
+vectorizer = pickle.load(open('models/tfidf_vectorizer.pkl', 'rb'))
 
 # load positive and negative arrays
 try:
