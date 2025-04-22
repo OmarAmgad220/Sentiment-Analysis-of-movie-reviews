@@ -154,6 +154,34 @@ def main():
     # reviews_df.to_csv('processed_movie_reviews.csv', index=False)
     # print("\nProcessed DataFrame saved to 'processed_movie_reviews.csv'")
     
+    # Naive Bayes classifier
+    model = MultinomialNB()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    print("Naive Bayes Performance:")
+    print(f"Accuracy: {100 * accuracy_score(y_test, y_pred):.2f}")
+    print("\nClassification Report:")
+    print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
+    
+    #Random Forest classifier
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    print("Random Forest Performance:")
+    print(f"Accuracy: {100 * accuracy_score(y_test, y_pred):.2f}")
+    print("\nClassification Report:")
+    print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
+    
+    # KNN classifier
+
+    model = KNeighborsClassifier(n_neighbors=300)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    print("KNN Performance:")
+    print(f"Accuracy: {100 * accuracy_score(y_test, y_pred):.2f}")
+    print("\nClassification Report:")
+    print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
+    
     # endregion
 	
     # region Complete model/s and example prediction
@@ -166,7 +194,7 @@ def main():
     CompleteNB.fit(X, y)
     CompleteRF = RandomForestClassifier(n_estimators=100, random_state=42)
     CompleteRF.fit(X, y)
-    CompleteKNN = KNeighborsClassifier(n_neighbors=5)
+    CompleteKNN = KNeighborsClassifier(n_neighbors=300)
     CompleteKNN.fit(X, y)
     
     input_text = "it was a great movie"
@@ -176,6 +204,12 @@ def main():
     print(f"Prediction of Logistic for '{input_text}': {'Positive' if prediction == 1 else 'Negative'}")
     prediction = CompleteSVM.predict(features)[0]
     print(f"Prediction of SVM for '{input_text}': {'Positive' if prediction == 1 else 'Negative'}")
+    prediction = CompleteNB.predict(features)[0]
+    print(f"Prediction of Naive Bayes for '{input_text}': {'Positive' if prediction == 1 else 'Negative'}")
+    prediction = CompleteRF.predict(features)[0]
+    print(f"Prediction of Random Forest for '{input_text}': {'Positive' if prediction == 1 else 'Negative'}")
+    prediction = CompleteKNN.predict(features)[0]
+    print(f"Prediction of KNN for '{input_text}': {'Positive' if prediction == 1 else 'Negative'}")
     
     # pickle.dump(CompleteLogistic, open('models/Logistic_Regression.pkl', 'wb'))
     # pickle.dump(CompleteSVM, open('models/SVM.pkl', 'wb')) 
