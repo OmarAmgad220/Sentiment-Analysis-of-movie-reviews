@@ -8,20 +8,37 @@
     <link rel="stylesheet" href="/static/CSS/normalize.css">
 </head>
 <body>
-    <!--Nav Bar Start-->
-    <ul>
-        <li><a class="Logo" href="{{ url_for('home') }}">Movie Reviews</a></li>
-        <li><h2>NLP</h2></li>
-    </ul>
-    <!--Nav Bar End-->
+    <!-- Nav Bar Start -->
+    <div class="navbar">
+        <a class="Logo" href="{{ url_for('home', model=usedModel) }}">Movie Reviews</a>
+
+        <!-- Model Select Form -->
+        <form id="selectModel" action="{{ url_for('select') }}" method="post">
+            <label for="modelsSelect" id="modelsLabel">Select Classifier:</label>
+            <select name="models" id="modelsSelect">
+                <option value="LogisticRegression" {% if usedModel == "LogisticRegression" %}selected{% endif %}>Logistic Regression</option>
+                <option value="SVM" {% if usedModel == "SVM" %}selected{% endif %}>SVM</option>
+                <option value="NaiveBayes" {% if usedModel == "NaiveBayes" %}selected{% endif %}>Naive Bayes</option>
+                <option value="RandomForest" {% if usedModel == "RandomForest" %}selected{% endif %}>Random Forest</option>
+                <option value="KNN" {% if usedModel == "KNN" %}selected{% endif %}>KNN</option>
+            </select>
+            <button type="submit" id="selButton">Select</button>
+        </form>
+        
+
+        <h2>NLP</h2>
+    </div>
+    <!-- Nav Bar End -->
 
     <!--Write Review Start-->
     <div>
-        <form action="{{ url_for('predict')}}" method="post">
+        <form action="{{ url_for('predict') }}" method="post">
             <p>Write a review:</p>
             <textarea name="content" placeholder="Review" required="required"></textarea>
+            <input type="hidden" name="usedModel" value="{{ usedModel }}">
             <button type="submit">Predict</button>
-        </form>
+        </form>        
+        
         {% if predict == "Positive" %}
             <div class="predict positive-review">{{ predict }}</div>
         {% elif predict == "Negative" %}

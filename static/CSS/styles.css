@@ -26,17 +26,17 @@ body {
 
 /* Nav Bar Start */
 
-ul {
+.navbar {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     column-gap: 100px;
-    padding: 12px;
     background: var(--primary-color, #113f67); 
     justify-content: space-between;
     align-items: center;
+    padding: 12px;
 }
 
 a, h2 {
@@ -51,11 +51,22 @@ a, h2 {
     font-size: 30px;
 }
 
+#selectModel {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+    font: bold;
+    color: var(--white);
+    margin-right: 10%;
+}
+
 
 /* Nav Bar End */
 
 /* Main Form Start */
-form {
+form:not(#selectModel) {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
