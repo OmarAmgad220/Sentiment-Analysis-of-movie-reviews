@@ -29,8 +29,13 @@ except:
 # home menu
 @app.route('/')
 def home():
-    model_name = request.args.get('model', 'SVM')  # get from query string
+    model_name = request.args.get('model')
+    if not model_name:
+        # Redirect to default model if not provided in URL
+        return redirect(url_for('home', model='SVM'))
+
     return render_template('index.html', usedModel=model_name, positive=positive, negative=negative)
+
 
 
 # model selection
