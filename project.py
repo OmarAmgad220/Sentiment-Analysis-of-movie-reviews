@@ -5,6 +5,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.ensemble import RandomForestClassifier
@@ -21,6 +22,8 @@ import contractions
 from nltk.corpus import wordnet
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 
 def load_reviews(positive_folder, negative_folder):
     reviews = []
@@ -29,16 +32,16 @@ def load_reviews(positive_folder, negative_folder):
     # Read positive reviews
     for filename in os.listdir(positive_folder):
             file_path = os.path.join(positive_folder, filename)
-            with open(file_path, 'r', encoding='utf-8') as file:
-                review_text = file.read().strip()
+            with open(file_path, 'r') as file:
+                review_text = file.read()
                 reviews.append(review_text)
                 labels.append('positive')
 
     # Read negative reviews
     for filename in os.listdir(negative_folder):
             file_path = os.path.join(negative_folder, filename)
-            with open(file_path, 'r', encoding='utf-8') as file:
-                review_text = file.read().strip()
+            with open(file_path, 'r') as file:
+                review_text = file.read()
                 reviews.append(review_text)
                 labels.append('negative')
     
@@ -104,7 +107,7 @@ def main():
     
     # region for loading data and preprocessing
 	
-    # Paths (to read the raw data txt files)
+    # paths (to read the raw data txt files)
 	
     # pos_folder = 'pos'
     # neg_folder = 'neg'
@@ -115,6 +118,7 @@ def main():
     reviews_df['sentiment'] = reviews_df['sentiment'].map({'positive': 1, 'negative': 0})
     
     #TF-IDF vectorization
+	
     tfidf_vectorizer = TfidfVectorizer(max_features=2000)
     X = tfidf_vectorizer.fit_transform(reviews_df['review_text'])
     y = reviews_df['sentiment']
@@ -123,68 +127,77 @@ def main():
     
     # region for trainning and testing
     
+    # collect performance data
+    model_names = []
+    train_accuracies = []
+    test_accuracies = []
+    confusion_matricies = []
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
     
-    # Logistic Regression classifier
-    classifier = LogisticRegression(max_iter=1000)
-    classifier.fit(X_train, y_train)
-    
-    y_pred = classifier.predict(X_test)
-    
-    print("Logistic Performance:")
-    print(f"Accuracy: { 100 * accuracy_score(y_test, y_pred):.2f}")
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
-    
-    # Save To new CSV file
-    # reviews_df.to_csv('processed_movie_reviews.csv', index=False)
-    # print("\nProcessed DataFrame saved to 'processed_movie_reviews.csv'")
-    
-    # SVM classifier
-    model = SVC(kernel='linear',C=1.6)
-    model.fit(X_train, y_train)
-    
-    y_pred = model.predict(X_test)
+    def evaluate_classifier(classifier, name, X_train, y_train, X_test, y_test):
+        classifier.fit(X_train, y_train)
+        y_pred_train = classifier.predict(X_train)
+        y_pred = classifier.predict(X_test)
+        print(f"\n{name} Classification Report:\n")
+        print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
+        model_names.append(name)
+        train_accuracies.append(100 * accuracy_score(y_train, y_pred_train))
+        test_accuracies.append(100 * accuracy_score(y_test, y_pred))
+        cm = confusion_matrix(y_test, y_pred)
+        confusion_matricies.append(cm)
 
-    print("SVM Performance:")
-    print(f"Accuracy: {100 * accuracy_score(y_test, y_pred):.2f}")
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
-    # Save To new CSV file
-    # reviews_df.to_csv('processed_movie_reviews.csv', index=False)
-    # print("\nProcessed DataFrame saved to 'processed_movie_reviews.csv'")
-    
-    # Naive Bayes classifier
-    model = MultinomialNB()
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    print("Naive Bayes Performance:")
-    print(f"Accuracy: {100 * accuracy_score(y_test, y_pred):.2f}")
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
-    
-    #Random Forest classifier
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    print("Random Forest Performance:")
-    print(f"Accuracy: {100 * accuracy_score(y_test, y_pred):.2f}")
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
-    
-    # KNN classifier
+    # Logistic Regression
+    evaluate_classifier(LogisticRegression(max_iter=1000), 'Logistic Regression', X_train, y_train, X_test, y_test)
 
-    model = KNeighborsClassifier(n_neighbors=300)
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    print("KNN Performance:")
-    print(f"Accuracy: {100 * accuracy_score(y_test, y_pred):.2f}")
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred, target_names=['Negative', 'Positive']))
-    
+    # SVM
+    evaluate_classifier(SVC(kernel='linear', C=1.6), 'SVM', X_train, y_train, X_test, y_test)
+
+    # Naive Bayes
+    evaluate_classifier(MultinomialNB(), 'Naive Bayes', X_train, y_train, X_test, y_test)
+
+    # Random Forest
+    evaluate_classifier(RandomForestClassifier(n_estimators=100, random_state=42), 'Random Forest', X_train, y_train, X_test, y_test)
+
+    # KNN
+    evaluate_classifier(KNeighborsClassifier(n_neighbors=300), 'KNN', X_train, y_train, X_test, y_test)
+
     # endregion
 	
-    # region Complete model/s and example prediction
+    # region for printing accuracies and ploting the results 
+
+    # plotting the accuracies
+    for i, name in enumerate(model_names):
+        print(f"{name} Performance Summary:\n")
+        print(f"Train Accuracy: {train_accuracies[i]:.2f}%")
+        print(f"Test Accuracy: {test_accuracies[i]:.2f}%\n")
+
+    # plotting confusion matrices
+    for i, cm in enumerate(confusion_matricies):
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['Negative', 'Positive'], yticklabels=['Negative', 'Positive'])
+        plt.title(f'Confusion Matrix for {model_names[i]}')
+        plt.xlabel('Predicted')
+        plt.ylabel('True')
+        plt.show()
+
+    # plotting the results
+    plt.figure(figsize=(12, 6))
+    index = range(len(model_names))
+
+    plt.bar([i + 0.35 for i in index], test_accuracies, width=0.3, label='Test Accuracy')
+    plt.bar(index, train_accuracies, width=0.3, label='Train Accuracy')
+    plt.xticks([i + 0.175 for i in index], model_names)
+
+    plt.xlabel('Model')
+    plt.ylabel('Accuracy (%)')
+    plt.title('Model Accuracies')
+    plt.legend()
+    plt.show()
+	
+    # endregion
+
+    # region Complete classifier/s and example prediction
 	
     CompleteLogistic = LogisticRegression(max_iter=1000)
     CompleteLogistic.fit(X, y)
@@ -210,7 +223,9 @@ def main():
     print(f"Prediction of Random Forest for '{input_text}': {'Positive' if prediction == 1 else 'Negative'}")
     prediction = CompleteKNN.predict(features)[0]
     print(f"Prediction of KNN for '{input_text}': {'Positive' if prediction == 1 else 'Negative'}")
-    
+
+    # save the models and the text vectorizer
+
     # pickle.dump(CompleteLogistic, open('models/Logistic_Regression.pkl', 'wb'))
     # pickle.dump(CompleteSVM, open('models/SVM.pkl', 'wb')) 
     # pickle.dump(CompleteNB, open('models/Naive_Bayes.pkl', 'wb'))

@@ -11,7 +11,6 @@ app = Flask(__name__)
 vectorizer = pickle.load(open('models/tfidf_vectorizer.pkl', 'rb'))
 
 # load the models
-
 models = {
         "SVM": pickle.load(open('models/SVM.pkl', 'rb')),
         "LogisticRegression": pickle.load(open('models/Logistic_Regression.pkl', 'rb')),
@@ -58,8 +57,7 @@ def predict():
         preprocessed_input_text = preprocess_text(input_text)
         features = vectorizer.transform([preprocessed_input_text])
 
-        # Use the selected model from the dictionary
-        selected_model = models.get(model_name, models['SVM'])  # Fallback to SVM if model not found
+        selected_model = models.get(model_name, models['SVM'])
         prediction = selected_model.predict(features)[0]
 
         if prediction == 1:
